@@ -1,0 +1,134 @@
+#body{
+    background-color: #333333;
+}
+
+#canvas{
+   border: solid 1px #d6d6d6;
+    background-color: #fcfcfc;
+    border-radius: 25px;";
+}
+
+
+.panel{
+    background-color: #262626;
+    color: #eee;
+}
+
+
+.painel_verm{
+    border-color:#b7191c;
+}
+
+.painel_verm .panel-heading{
+    color:#fff;
+    background-color:#ed6857;
+    border-color:#b7191c;
+}
+
+
+.painel_azul {
+    border-color:#337ab7;
+}
+
+.painel_azul .panel-heading{
+    color:#fff;
+    background-color:#337ab7;
+    border-color:#337ab7;
+}
+
+.painel_verd{
+    border-color: #34b76a;
+}
+
+.painel_verd .panel-heading{
+    color:#fff;
+    background-color: #66ed80;
+    border-color: #34b76a;
+}
+
+
+#panel-graficos{
+
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -khtml-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+
+}
+
+
+
+.label-verm-active{
+    color: #c6c6c6;
+    background-color: #d86251;
+    height: 30px;
+    margin-right: 10px;
+    padding:5px 5px 3px 5px;
+    border:solid 1px #ba5554;
+}
+
+
+.label-verm{
+    background-color:#ed6857;
+    color: #fff;
+    height: 30px;
+    margin-right: 10px;
+    padding:5px 5px 3px 5px;
+    border:solid 1px #ba5554;
+}
+
+.label-verm:hover{
+   cursor: pointer;
+}
+
+
+
+
+
+.label-verd-active{
+    color: #dbdbdb;
+    background-color: #53bc62;
+    height: 30px;
+    margin-right: 10px;
+    padding:5px 5px 3px 5px;
+    border:solid 1px #4cb05f;
+}
+
+
+.label-verd{
+    background-color: #66ed80;
+    color: #fff;
+    height: 30px;
+    margin-right: 10px;
+    padding:5px 5px 3px 5px;
+    border:solid 1px #4cb05f;
+}
+
+.label-verd:hover{
+    cursor: pointer;
+}
+
+.label-azul-active{
+    color: #dbdbdb;
+    background-color: #285c8c;
+    height: 30px;
+    margin-right: 10px;
+    padding:5px 5px 3px 5px;
+    border:solid 1px #204970;
+}
+
+
+.label-azul{
+    background-color: #337ab7;
+    color: #fff;
+    height: 30px;
+    margin-right: 10px;
+    padding:5px 5px 3px 5px;
+    border:solid 1px #2e679d;
+}
+
+.label-azul:hover{
+    cursor: pointer;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <script src="script/jquery.js"></script>
+    <script src="script/bootstarp/bootstrap.min.js"></script>
+    <script src="script/bootstarp/ie-emulation-modes-warning.js"></script>
+
+    <script src="script/model/Printer.js"></script>
+    <script src="script/model/Grid.js"></script>
+    <script src="script/model/Point.js"></script>
+    <script src="script/model/Graphic.js"></script>
+
+    <script src="script/Main.js"></script>
+
+    <link href="resource/css/bootstrap.min.css" rel="stylesheet">
+    <link href="resource/css/bootstrap-theme.css" rel="stylesheet">
+
+    <link href="resource/css/style.css" rel="stylesheet">
+
+
+    <title>Funcao Seno</title>
+</head>
+<body id="body">
+
+<nav class="navbar navbar-inverse navbar-fixed-top " role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" style="position: relative; top:-10px; left: -10px" href="">
+                <img alt="Brand" src="resource/img/logo.png">
+            </a>
+        </div>
+
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Projeto<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Novo Projeto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl+N</a></li>
+                        <li><a href="#">Abrir Projeto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl+O</a></li>
+                        <li><a href="#">Salvar Projeto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl+S</a></li>
+                        <li><a href="#">Exportar Image</a></li>
+
+                        <li class="divider"></li>
+
+                        <li><a href="#">Sair&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl+Q</a></li>
+
+                    </ul>
+                </li>
+
+
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Editar<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Criar novo Gráfico</a></li>
+                        <li><a href="#">Limpar todos os Gráficos</a></li>
+                        <li><a href="#">Preferências</a></li>
+                    </ul>
+                </li>
+
+
+
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Ajuda<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Tópico de Ajuda</a></li>
+                        <li><a href="#">Junte-se a nós</a></li>
+
+                        <li class="divider"></li>
+                        <li><a href="#">Sobre</a></li>
+
+                    </ul>
+                </li>
+
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="container_main" class="container-fluid" style="position: relative; top:100px">
+
+    <div class="row">
+        <div class="col-md-3">
+
+
+         <div id="panel-graficos">
+
+
+
+
+            </div>
+
+            <button id="bt-add-graphic" type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </div>
+
+
+
+
+
+        <div class="col-md-5">
+            <canvas  id="canvas" height="800" width="1000">Your Browser not suport HTML Canvas </canvas>
+        </div>
+
+</div>
+</body>
+</html>
