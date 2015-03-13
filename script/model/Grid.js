@@ -14,11 +14,10 @@ var Grid = function(){
 
 
 Grid.prototype.print = function(canvas){
-
         var context = canvas.getContext("2d");
         var HeightCanvas = canvas.height;
         var WidthCanvas = canvas.width;
-
+        var posPrint = -500;
 
         var cor = new Array();
         cor[0] =COR_PRETO;
@@ -26,52 +25,81 @@ Grid.prototype.print = function(canvas){
 
 
         //Horizontal
-        for(var i = 0; i< HeightCanvas; i++ ){
+        for(var i = 0; i< WidthCanvas/this.distanceVesticalLine ; i++ ){
+
+            var incrementH = false;
 
             context.strokeStyle = cor[1];
             context.lineWidth = 0.2;
             context.beginPath();
 
             var lastPosition = 0;
+
             while (lastPosition < WidthCanvas){
-                context.moveTo(lastPosition, i*this.distanceVesticalLine);
-                context.lineTo(lastPosition+this.sizeLine, i* this.distanceVesticalLine);
+                context.moveTo(lastPosition, i*this.distanceVesticalLine - (i*0.2));
+                context.lineTo(lastPosition+this.sizeLine, i* this.distanceVesticalLine - (i*0.2));
                 lastPosition += this.distanceLine+this.sizeLine;
             }
 
 
+            context.font="9px Arial";
+            context.fillText(""+posPrint,i* this.distanceVesticalLine - (i*0.2), 410);
+            posPrint+=50;
+
+
             context.stroke();
+          //  console.log(i* this.distanceVesticalLine - (i*0.2));
+
+
+
         }
 
+
+
+        posPrint = 400;
         //Vestical
-        for(var j = 0; j<HeightCanvas; j++ ){
+        for(var j = 0; j<HeightCanvas/this.distanceHorizontalLine ; j++ ){
+
             context.strokeStyle = this.cor.grades;
             context.lineWidth = 0.2;
             context.beginPath();
 
             var lastPosition = 0;
-            while (lastPosition < WidthCanvas){
-                context.moveTo(j*this.distanceHorizontalLine , lastPosition);
-                context.lineTo( j* this.distanceHorizontalLine , lastPosition+this.sizeLine);
+
+            while (lastPosition < HeightCanvas){
+
+                context.moveTo(j*this.distanceHorizontalLine - (j*0.2) , lastPosition);
+                context.lineTo( j* this.distanceHorizontalLine - (j*0.2), lastPosition+this.sizeLine);
                 lastPosition += this.distanceLine+sizeLine;
             }
+
+
+            context.font="9px Arial";
+            context.fillText(""+posPrint,500, j* this.distanceVesticalLine - (j*0.2)-5);
+            posPrint-=50;
+
             context.stroke();
+
+
+
+
         }
 
         context.strokeStyle = this.cor.eixo;
         context.lineWidth = 2;
         context.beginPath();
 
-        context.moveTo(0, HeightCanvas/2);
-        context.lineTo(WidthCanvas, HeightCanvas/2);
+        context.moveTo(0, HeightCanvas/2 - ((HeightCanvas/this.distanceHorizontalLine/2)*0.2));
+        context.lineTo(WidthCanvas, HeightCanvas/2 - ((HeightCanvas/this.distanceHorizontalLine/2)*0.2));
 
         context.stroke();
 
-
-        context.moveTo(WidthCanvas/2,0);
-        context.lineTo(WidthCanvas/2, HeightCanvas);
+        //this.distanceVesticalLine representa a defasagem gerada no gráfico pela espessura da linha
+        context.moveTo(WidthCanvas/2-(WidthCanvas/ this.distanceVesticalLine*0.2),0);
+        context.lineTo(WidthCanvas/2-(WidthCanvas/ this.distanceVesticalLine*0.2), HeightCanvas);
 
         context.stroke();
+
 
 
 

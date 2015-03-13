@@ -83,6 +83,9 @@
    cursor: pointer;
 }
 
+.label-verm-active:hover{
+    cursor: pointer;
+}
 
 
 
@@ -110,6 +113,11 @@
     cursor: pointer;
 }
 
+.label-verd-active:hover{
+    cursor: pointer;
+}
+
+
 .label-azul-active{
     color: #dbdbdb;
     background-color: #285c8c;
@@ -130,5 +138,9 @@
 }
 
 .label-azul:hover{
+    cursor: pointer;
+}
+
+.label-azul-active:hover{
     cursor: pointer;
 }
