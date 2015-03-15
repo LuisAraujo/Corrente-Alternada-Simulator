@@ -51,7 +51,12 @@ $(document).ready( function(){
 
 
     $("#bt-add-graphic").click(function(){
-        createGraphic(300,4,0);
+        if(idDisponivel==4)
+            $(this).remove();
+
+        if(idDisponivel<=4)
+            createGraphics(300,4,0);
+
     });
 
     Canvas = document.getElementById("canvas");
@@ -239,7 +244,7 @@ var loadFiles = function(){
 *  Adiciona ao arrayGraphics
 *  Cria o panel do Graphics
 */
-var createGraphic = function(Vm, w, o){
+var createGraphics = function(Vm, w, o){
 
     var cor1;
     var cor2

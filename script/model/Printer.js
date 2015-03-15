@@ -11,15 +11,28 @@ Printer.prototype.print = function(){
 
     this.grid.print(Canvas);
 
+    //Optimização para 3 graficos
     for(var i=this.graphics.length-1; i >= 0 ; i--){
 
         if(this.graphics[i].deleteMe){
-            console.log("d");
             this.graphics.popByIndex(i);
             continue;
         }
 
         this.graphics[i].print();
     }
+
+    /* padrão
+    for(var i=this.graphics.length-1; i >= 0 ; i--){
+
+        if(this.graphics[i].deleteMe){
+            this.graphics.popByIndex(i);
+            continue;
+        }
+
+        this.graphics[i].print();
+    }
+
+    */
 
 }

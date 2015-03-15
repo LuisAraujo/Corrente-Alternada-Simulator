@@ -78,12 +78,22 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
             "<span id='bt-excluir"+id+"' class='glyphicon glyphicon-trash' aria-hidden='true'></span>"+
             "</span>"+
 
-            "</div></h3></div>"+
+            "</div>" +
+            "</h3>" +
+            "</div>"+
+
+         //   "<div id='Graphic"+id+"' class='panel-body'>"+
             "<div id='Graphic"+id+"' class='panel-body'>"+
-            "<p> <b>Vm</b>(AMPLITUDE MAXIMA) = </p>"+
-            "<p> <b>&omega;</b> (FREQUENCIA ANGULAR) = </p>"+
-            "<p> <b>&theta;</b> (ANGULO DE FASE) =  </p>"+
-            "</div>";
+            "<div class='row'> " +
+            "<div class='col-md-4'>"+
+            "<p> V = Vm * sen ( &omega; t  +  &theta; )</p>"+
+            "</div>" +
+            "<div class='col-md-6'>"+
+                "<p> <b>Vm </b>(AMPLITUDE MAXIMA) =  <input type='text'  value='0' size='3' > </p>"+
+                "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input type='text'  value='0' size='3' > </p>"+
+                "<p> <b>&theta; </b> (ANGULO DE FASE) = <input type='text'  value='0' size='3' > </p>"+
+            "</div>"+
+            "</div></div>";
 
 
             var a = this;
@@ -260,15 +270,17 @@ Graphic.prototype.print = function(){
    if(this.isVisible){
 
             if(this.Vmchanged){
+                console.log("a");
                 this.arrayPontos = new Array();
-                Vmchanged = false;
+             //   this.Vmchanged = false;
                 this.printPanel();
             }
 
 
            if(this.Wchanged){
+               console.log("a");
                this.arrayQuadrado= new Array();
-               Wchanged = false;
+              // this.Wchanged = false;
                this.printPanel();
            }
 
@@ -360,11 +372,15 @@ Graphic.prototype.print = function(){
                 //No entanto t+=10 causa curvas brusca, sendo assim analiso se o ponto está próximo
                 //Ao limite e façp t+=2;
                 if ( (AntY > this.Vm - 50) || (AntY < -this.Vm + 50))
-                t+=1;
+                t+=2;
                 else
-                t+=5;
+                t+=10;
 
                 }
+
+            this.Wchanged = false;
+            this.Vmchanged = false;
+
            }
 
            Context.restore();
@@ -403,7 +419,22 @@ Graphic.prototype.printAlcaHorizontal = function(){
 
 }
 Graphic.prototype.printPanel = function(){
-    $("#"+this.idpanel).html( "<p> V = Vm  + sen(&omega;t + &theta;)</p><p><b>Vm </b>(AMPLITUDE MAXIMA) = "+this.Vm.toFixed(2)+"</p> <p> <b>&omega;</b> (FREQUENCIA ANGULAR) =  "+this.w.toFixed(0)+"" +
-        "</p> <p> <b>&theta;</b> (ANGULO DE FASE) =  "+this.o+"</p>");
+
+
+
+    $("#"+this.idpanel).html("<div class='row'> " +
+        "<div class='col-md-4'>"+
+        "<p> V = Vm * sen ( &omega; t  +  &theta; )</p>"+
+        "</div>" +
+        "<div class='col-md-6'>"+
+        "<p> <b>Vm </b>(AMPLITUDE MAXIMA) = <input type='text'  value='"+this.Vm.toFixed(0)+"' size='3' ></p>"+
+        "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input type='text'  value='"+this.w.toFixed(0)+"' size='3' > </p>"+
+        "<p> <b>&theta; </b> (ANGULO DE FASE) =   <input type='text'  value='"+this.o+"' size='3' > </p>"+
+        "</div>"+
+    "</div>");
+
+
+  //  $("#"+this.idpanel).html( "<p> V = Vm  + sen(&omega;t + &theta;)</p><p><b>Vm </b>(AMPLITUDE MAXIMA) = "+this.Vm.toFixed(2)+"</p> <p> <b>&omega;</b> (FREQUENCIA ANGULAR) =  "+this.w.toFixed(0)+"" +
+  //      "</p> <p> <b>&theta;</b> (ANGULO DE FASE) =  "+this.o+"</p>");
 };
 
