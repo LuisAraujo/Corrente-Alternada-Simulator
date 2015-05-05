@@ -17,7 +17,7 @@ Grid.prototype.print = function(canvas){
         var context = canvas.getContext("2d");
         var HeightCanvas = canvas.height;
         var WidthCanvas = canvas.width;
-        var posPrint = -500;
+        var posPrint = 0;
 
         var cor = new Array();
         cor[0] =COR_PRETO;
@@ -25,7 +25,7 @@ Grid.prototype.print = function(canvas){
 
 
         //Horizontal
-        for(var i = 0; i< WidthCanvas/this.distanceVesticalLine ; i++ ){
+        for(var i = 0; i< WidthCanvas; i++ ){
 
             var incrementH = false;
 
@@ -43,8 +43,8 @@ Grid.prototype.print = function(canvas){
 
 
             context.font="9px Arial";
-            context.fillText(""+posPrint,i* this.distanceVesticalLine - (i*0.2), 410);
-            posPrint+=50;
+            context.fillText(""+posPrint.toFixed(2),i* this.distanceVesticalLine - (5+i*0.25), 410);
+            posPrint+=0.05;
 
 
             context.stroke();
@@ -58,7 +58,7 @@ Grid.prototype.print = function(canvas){
 
         posPrint = 400;
         //Vestical
-        for(var j = 0; j<HeightCanvas/this.distanceHorizontalLine ; j++ ){
+        for(var j = 0; j<HeightCanvas; j++ ){
 
             context.strokeStyle = this.cor.grades;
             context.lineWidth = 0.2;
@@ -75,7 +75,7 @@ Grid.prototype.print = function(canvas){
 
 
             context.font="9px Arial";
-            context.fillText(""+posPrint,500, j* this.distanceVesticalLine - (j*0.2)-5);
+            context.fillText(""+posPrint,7, j* this.distanceVesticalLine - (j*0.2)-5);
             posPrint-=50;
 
             context.stroke();
@@ -95,8 +95,10 @@ Grid.prototype.print = function(canvas){
         context.stroke();
 
         //this.distanceVesticalLine representa a defasagem gerada no gráfico pela espessura da linha
-        context.moveTo(WidthCanvas/2-(WidthCanvas/ this.distanceVesticalLine*0.2),0);
-        context.lineTo(WidthCanvas/2-(WidthCanvas/ this.distanceVesticalLine*0.2), HeightCanvas);
+        context.moveTo(3,0);
+        //context.moveTo(WidthCanvas/2-(WidthCanvas/ this.distanceVesticalLine*0.2),0);
+        context.lineTo(3, HeightCanvas);
+        //context.lineTo(WidthCanvas/2-(WidthCanvas/ this.distanceVesticalLine*0.2), HeightCanvas);
 
         context.stroke();
 

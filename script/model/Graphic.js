@@ -8,8 +8,9 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
     this.w = w;
     this.o = o;
     this.cor = cor;
-    this.arrayPontos = new Array();
-    this.arrayQuadrado = new Array();
+    this.arrayAlcaVm = new Array();
+    this.arrayAlcaW = new Array();
+    this.AlcaO = null;
     //forcando a impressao
     this.Vmchanged = true;
     this.Wchanged = true;
@@ -17,16 +18,24 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
     this.id=id;
     this.idpanel = "Graphic"+this.id;
     this.isVisible = true;
-    this.isResize_v = false;
-    this.isResize_h = false;
+    this.isChange_w = false;
+    this.isChange_vm = false;
+    this.isChange_o = false;
+    this.isEditable = false;
     this.isMove = false;
     this.deleteMe = false;
+
+
+    //Para o modo Edit
+    this.lastValueW=0;
+    this.lastValueVm=0;
+    this.lastValueO=0;
 
     if(id==0 || id==1)
      titulo+=" A";
     else if(id==2 || id==3 )
      titulo+=" B";
-    else if(id=4 || id==5)
+    else if(id==4 || id==5)
      titulo+=" C";
 
     createPanel = function(){
@@ -89,14 +98,15 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
             "<p> V = Vm * sen ( &omega; t  +  &theta; )</p>"+
             "</div>" +
             "<div class='col-md-6'>"+
-                "<p> <b>Vm </b>(AMPLITUDE MAXIMA) =  <input type='text'  value='0' size='3' > </p>"+
-                "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input type='text'  value='0' size='3' > </p>"+
-                "<p> <b>&theta; </b> (ANGULO DE FASE) = <input type='text'  value='0' size='3' > </p>"+
+                "<p> <b>Vm </b>(AMPLITUDE MAXIMA) =  <input id='txVm"+id+"' type='text'  value='0' size='3' disabled/> </p>"+
+                "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input id='txW"+id+"' type='text'  value='0' size='3' disabled/> </p>"+
+                "<p> <b>&theta; </b> (ANGULO DE FASE) = <input id='txO"+id+"' type='text'  value='0' size='3' disabled/> </p>"+
             "</div>"+
             "</div></div>";
 
 
             var a = this;
+
         $("#panel-graficos").append(elem);
 
         $("#cont-bt-visible"+id).click(function(){
@@ -115,16 +125,27 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
 
 
         $("#cont-bt-excluir"+id).click(function(){
-            console.log("delete")
             instacia.deleteMe = true;
-            $("#panel"+id).remove();
 
+            if(id%2 == 0){
+                $("#panel"+id).remove();
+                $("#panel"+(parseInt(id)+1)).remove();
+                arrayGraphics.getById(parseInt(id)+1).deleteMe = true;
+            }else{
+                $("#panel"+id).remove();
+                $("#panel"+(parseInt(id)-1)).remove();
+                arrayGraphics.getById(parseInt(id)-1).deleteMe = true;
+
+            }
+
+
+            $("#bt-add-graphic").show();
 
         });
 
         $("#cont-bt-refresh-"+id).click(function(){
             instacia.Vm = 100;
-			instacia.w = 4;
+			instacia.w = 6.28;
 			instacia.o = 0;
 			instacia.Vmchanged = true;
 			instacia.Wchanged = true;
@@ -132,20 +153,20 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
 
         $("#cont-bt-resize-v-"+id).click( function(){
             //ativa
-            if(instacia.isResize_v == false){
-                instacia.isResize_v = true;
+            if(instacia.isChange_w == false){
+                instacia.isChange_w = true;
                 $(this).removeClass(  $(this).attr('labelcor'));
                 $(this).addClass(  $(this).attr('labelcor')+"-active");
             //desativa
             }else{
-                instacia.isResize_v = false;
+                instacia.isChange_w = false;
                 $(this).removeClass( $(this).attr('labelcor')+"-active");
                 $(this).addClass( $(this).attr('labelcor'));
             }
 
 
-            if(instacia.isResize_h == true){
-                instacia.isResize_h = false;
+            if(instacia.isChange_vm == true){
+                instacia.isChange_vm = false;
                 var elem = document.getElementById("cont-bt-resize-h-"+id);
                 $("#cont-bt-resize-h-"+id).removeClass( elem.getAttribute('labelcor')+"-active");
                 $("#cont-bt-resize-h-"+id).addClass( elem.getAttribute('labelcor'));
@@ -164,22 +185,22 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
         $("#cont-bt-resize-h-"+id).click(function(){
 
             //ativa
-            if(instacia.isResize_h == false){
-                instacia.isResize_h = true;
+            if(instacia.isChange_vm == false){
+                instacia.isChange_vm = true;
                 $(this).removeClass($(this).attr('labelcor'));
                 $(this).addClass( $(this).attr('labelcor')+"-active");
 
             //desativa
             }else{
-                instacia.isResize_h = false;
+                instacia.isChange_vm = false;
                 $(this).removeClass($(this).attr('labelcor')+"-active");
                 $(this).addClass( $(this).attr('labelcor'));
 
             }
 
 
-            if(instacia.isResize_v == true){
-                instacia.isResize_v = false;
+            if(instacia.isChange_w == true){
+                instacia.isChange_w = false;
                 var elem = document.getElementById("cont-bt-resize-v-"+id);
                 $("#cont-bt-resize-v-"+id).removeClass( elem.getAttribute('labelcor')+"-active");
                 $("#cont-bt-resize-v-"+id).addClass( elem.getAttribute('labelcor'));
@@ -202,9 +223,11 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
 
             if(instacia.isMove == false){
                 instacia.isMove = true;
+                instacia.isChange_o = true;
                 $(this).removeClass( $(this).attr('labelcor')  );
                 $(this).addClass($(this).attr('labelcor')+"-active");
             }else{
+                instacia.isChange_o = false;
                 instacia.isMove = false;
                 $(this).removeClass($(this).attr('labelcor')+"-active");
                 $(this).addClass( $(this).attr('labelcor')  );
@@ -212,16 +235,16 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
             }
 
 
-            if(instacia.isResize_h == true){
-                instacia.isResize_h = false;
+            if(instacia.isChange_vm == true){
+                instacia.isChange_vm = false;
                 var elem = document.getElementById("cont-bt-resize-h-"+id);
                 $("#cont-bt-resize-h-"+id).removeClass( elem.getAttribute('labelcor')+"-active");
                 $("#cont-bt-resize-h-"+id).addClass( elem.getAttribute('labelcor'));
             }
 
 
-            if(instacia.isResize_v == true){
-                instacia.isResize_v = false;
+            if(instacia.isChange_w == true){
+                instacia.isChange_w = false;
                 var elem = document.getElementById("cont-bt-move"+id);
                 $("#cont-bt-resize-v-"+id).removeClass(elem.getAttribute('labelcor')+"-active");
                 $("#cont-bt-resize-v-"+id).addClass(elem.getAttribute('labelcor'));
@@ -230,6 +253,104 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
 
 
         });
+
+
+        $("#cont-bt-edit-"+id).click(function(){
+
+
+            if(instacia.isEditable){
+                instacia.isEditable = false;
+
+                $(this).removeClass(  $(this).attr('labelcor')+"-active");
+                $(this).addClass(  $(this).attr('labelcor'));
+
+                $("#txVm"+instacia.id).attr('disabled',true);
+                $("#txW"+instacia.id).attr('disabled', true);
+                $("#txO"+instacia.id).attr('disabled', true);
+
+
+            }else{
+                instacia.isEditable = true;
+                $(this).removeClass(  $(this).attr('labelcor'));
+                $(this).addClass(  $(this).attr('labelcor')+"-active");
+
+                $("#txVm"+instacia.id).removeAttr('disabled');
+                $("#txW"+instacia.id).removeAttr('disabled');
+                $("#txO"+instacia.id).removeAttr('disabled');
+
+            }
+            //forca atualização do panel
+            instacia.Vmchanged = true;
+
+        });
+
+        //INPUTS (Vm, W, O)
+        $("#txVm"+id).focus(function(){
+            instacia.lastValueVm = $(this).val();
+        });
+
+        $("#txVm"+id).change(function(){
+            if(isNaN($(this).val()) == true ){
+                $(this).val(instacia.lastValueVm);
+                instacia.Vm = parseFloat(instacia.lastValueVm);
+                instacia.Vmchanged = true;
+            }else{
+                instacia.Vm = parseFloat($(this).val());
+                instacia.Vmchanged = true;
+            }
+
+        });
+
+
+        $("#txW"+id).focus(function(){
+            instacia.lastValueW = $(this).val();
+        });
+
+        $("#txW"+id).change(function(){
+            if(isNaN( $(this).val()) == true ){
+                console.log("!isNaN  "+$(this).val());
+                $(this).val(instacia.lastValueW);
+                instacia.w = parseFloat(instacia.lastValueW);
+                instacia.Wchanged = true;
+            }else{
+                console.log("isNaN"+$(this).val());
+                instacia.w = parseFloat($(this).val());
+                instacia.Wchanged = true;
+            }
+
+        });
+
+
+
+        $("#txO"+id).change(function(){
+            instacia.lastValueO = $(this).val();
+        });
+
+        $("#txO"+id).blur(function(){
+            if(isNaN( $(this).val()) == true ){
+                $(this).val(instacia.lastValueO);
+                instacia.o = parseFloat(instacia.lastValueO);
+               // instacia.Ochanged = true;
+            }else{
+                instacia.o = parseFloat($(this).val());
+                instacia.Ochanged = true;
+            }
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -270,20 +391,17 @@ Graphic.prototype.print = function(){
    if(this.isVisible){
 
             if(this.Vmchanged){
-                console.log("a");
-                this.arrayPontos = new Array();
-             //   this.Vmchanged = false;
-                this.printPanel();
+                this.arrayAlcaVm = new Array();
+                this.Vmchanged = false;
+                this.changePanel();
             }
 
 
            if(this.Wchanged){
-               console.log("a");
-               this.arrayQuadrado= new Array();
-              // this.Wchanged = false;
-               this.printPanel();
+               this.arrayAlcaW= new Array();
+               this.Wchanged = false;
+               this.changePanel();
            }
-
 
             var subindo= true;
 
@@ -314,84 +432,91 @@ Graphic.prototype.print = function(){
             //sizeline
             Context.lineWidth = 1;
 
-       //melhorando o desempenho
-       if((this.Wchanged) || (this.Vmchanged)){
-
            Context.save();
            Context.translate(0,this.Vm*((HeightCanvas/this.Vm)/2));
            Context.beginPath();
 
-            while( t <= WidthCanvas){
+           while(t <= WidthCanvas/1000){
 
-                //Context.moveTo(AntX,AntY);
+                AtuX =  t*1000;
 
-                AtuX = t;
+                /*Transladando 5 pixel a cord x
+                / para inicio afastado da margem
+                */
+                AtuX+=5;
 
-                AtuX/zoom;
-
-                //Formula do gráfico seno
-               // AtuY =  this.Vm * Math.sin( ( (this.w*Math.PI/180)*AtuX/zoom + this.o ))/zoom;
-                AtuY =  this.Vm * Math.sin( ( (this.w*Math.PI/180)*t + this.o ));
+                /* Fórmula do Gráfico da
+                 / Corrente Alternada
+                 */
+                AtuY =  this.Vm * Math.sin( this.w * t + this.o );
 
                 Context.lineTo(AtuX,AtuY);
                 Context.stroke();
 
-                if(this.isResize_v){
+
+               //Imprimindo as alças
+                if(this.isChange_w){
                     if(subindo && AtuY < AntY){
                         subindo = false;
-                        var p = new Point(arrayImgLoad,AntX-5, AntY-5, 10, 10, this.Vm, this.cor,AntY<0?true:false);
-                        this.arrayPontos.push(p);
+
+                        var up = null;
+
+                        if(AtuY>0)
+                         up = false;
+                        else
+                         up = true;
+
+                        var p = new AlcaVm(arrayImgLoad,AntX-5, AntY-5, 10, 16, this.Vm, this.cor,up);
+                        this.arrayAlcaVm.push(p);
 
                     }else  if(!subindo && AtuY > AntY){
                         subindo = true;
-                        var p = new Point(arrayImgLoad,AntX-5, AntY-5, 10, 10, this.Vm, this.cor,AntY<0?true:false);
-                        this.arrayPontos.push(p);
+                        var p = new AlcaVm(arrayImgLoad,AntX-5, AntY-8, 10, 16, this.Vm, this.cor,up);
+                        this.arrayAlcaVm.push(p);
 
                     }
 
-                }else if(this.isResize_h){
+                }else if(this.isChange_vm){
 
                     if((AntY > 0 && AtuY-5 < 0) || (AntY < 0 && AtuY+5 > 0)) {
 
-                        var p = new Squere(arrayImgLoad,AntX-5, 0, 10, 10, this.Vm, this.cor);
-						if(this.arrayQuadrado.length == 0)
-                            this.arrayQuadrado.push(p);
+                        var p = new Squere(arrayImgLoad,AntX-5, 0, 16, 10, this.Vm, this.cor);
+						if(this.arrayAlcaW.length == 0)
+                            this.arrayAlcaW.push(p);
                         else
-                            this.arrayQuadrado[1]= p;
+                            this.arrayAlcaW[1]= p;
 
                     }
+                }else if(this.isChange_o){
+                        this.AlcaO = new AlcaO(arrayImgLoad, WidthCanvas/2-10,-10, 20, 20, this.o, this.cor);
                 }
+
+
+
 
 
 
                 AntX = AtuX;
                 AntY = AtuY;
 
-                //Resolvendo o problema de curva
-                //Se t+=2 para cada ponto o tempo de cálco iria almentar significantemente
-                //No entanto t+=10 causa curvas brusca, sendo assim analiso se o ponto está próximo
-                //Ao limite e façp t+=2;
-                if ( (AntY > this.Vm - 50) || (AntY < -this.Vm + 50))
-                t+=2;
-                else
-                t+=10;
+
+                t+=0.003;
 
                 }
 
             this.Wchanged = false;
             this.Vmchanged = false;
 
-           }
-
-           Context.restore();
+            Context.restore();
 
 
-         if(this.isResize_v){
+         if(this.isChange_w){
             this.printAlcaVertical();
-         }else if (this.isResize_h){
+         }else if (this.isChange_vm){
              this.printAlcaHorizontal();
+         }else if(this.isChange_o){
+             this.printAlcaMove();
          }
-
    }
 
 };
@@ -402,8 +527,8 @@ Graphic.prototype.printAlcaVertical = function(){
     Context.save();
     Context.translate(0,this.Vm*((HeightCanvas/this.Vm)/2));
     //Printing points
-        for(var i=0; i<this.arrayPontos.length;i++)
-            Context.drawImage(this.arrayPontos[i].image, this.arrayPontos[i].x, this.arrayPontos[i].y, this.arrayPontos[i].h, this.arrayPontos[i].w);
+        for(var i=0; i<this.arrayAlcaVm.length;i++)
+            Context.drawImage(this.arrayAlcaVm[i].image, this.arrayAlcaVm[i].x, this.arrayAlcaVm[i].y, this.arrayAlcaVm[i].h, this.arrayAlcaVm[i].w);
 
     Context.restore();
 }
@@ -412,29 +537,57 @@ Graphic.prototype.printAlcaHorizontal = function(){
     Context.save();
     Context.translate(0,this.Vm*((HeightCanvas/this.Vm)/2));
     //Printing points
-    for(var i=0; i<this.arrayQuadrado.length;i++)
-        Context.drawImage(this.arrayQuadrado[i].image, this.arrayQuadrado[i].x, this.arrayQuadrado[i].y, this.arrayQuadrado[i].h, this.arrayQuadrado[i].w);
+    for(var i=0; i<this.arrayAlcaW.length;i++)
+        Context.drawImage(this.arrayAlcaW[i].image, this.arrayAlcaW[i].x, this.arrayAlcaW[i].y, this.arrayAlcaW[i].h, this.arrayAlcaW[i].w);
 
     Context.restore();
 
 }
+
+Graphic.prototype.printAlcaMove = function(){
+
+    Context.save();
+    Context.translate(0,this.Vm*((HeightCanvas/this.Vm)/2));
+    //Printing points
+    Context.drawImage(this.AlcaO.image, this.AlcaO.x, this.AlcaO.y, this.AlcaO.h, this.AlcaO.w);
+
+    Context.restore();
+
+}
+
+
 Graphic.prototype.printPanel = function(){
 
-
-
-    $("#"+this.idpanel).html("<div class='row'> " +
+    str= "<div class='row'> " +
         "<div class='col-md-4'>"+
         "<p> V = Vm * sen ( &omega; t  +  &theta; )</p>"+
         "</div>" +
-        "<div class='col-md-6'>"+
-        "<p> <b>Vm </b>(AMPLITUDE MAXIMA) = <input type='text'  value='"+this.Vm.toFixed(0)+"' size='3' ></p>"+
-        "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input type='text'  value='"+this.w.toFixed(0)+"' size='3' > </p>"+
-        "<p> <b>&theta; </b> (ANGULO DE FASE) =   <input type='text'  value='"+this.o+"' size='3' > </p>"+
-        "</div>"+
-    "</div>");
+        "<div class='col-md-6'>";
 
+      if (!this.isEditable){
 
-  //  $("#"+this.idpanel).html( "<p> V = Vm  + sen(&omega;t + &theta;)</p><p><b>Vm </b>(AMPLITUDE MAXIMA) = "+this.Vm.toFixed(2)+"</p> <p> <b>&omega;</b> (FREQUENCIA ANGULAR) =  "+this.w.toFixed(0)+"" +
-  //      "</p> <p> <b>&theta;</b> (ANGULO DE FASE) =  "+this.o+"</p>");
+            str+="<p> <b>Vm </b>(AMPLITUDE MAXIMA) = <input id='txVm"+this.id+"' type='text'  value='"+this.Vm.toFixed(0)+"' size='3' disable></p>"+
+            "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input id='txW"+this.id+"' type='text'  value='"+this.w.toFixed(2)+"' size='3' disabled> </p>"+
+            "<p> <b>&theta; </b> (ANGULO DE FASE) =   <input id='txO"+this.id+"' type='text'  value='"+this.o+"' size='3' disabled> </p>"+
+            "</div>";
+       }else{
+
+            str+="<p> <b>Vm </b>(AMPLITUDE MAXIMA) = <input id='txVm"+this.id+"' type='text'  value='"+this.Vm.toFixed(0)+"' size='3' ></p>"+
+            "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input id='txW"+this.id+"' type='text'  value='"+this.w.toFixed(2)+"' size='3' > </p>"+
+            "<p> <b>&theta; </b> (ANGULO DE FASE) =   <input id='txO"+this.id+"' type='text'  value='"+this.o+"' size='3' > </p>"+
+            "</div>";
+      }
+
+    str+="</div>";
+
+    $("#"+this.idpanel).html(str);
+
 };
 
+Graphic.prototype.changePanel = function(){
+
+     $("#txVm"+this.id).val(this.Vm.toFixed(0));
+     $("#txW"+this.id).val(this.w.toFixed(2));
+     $("#txO"+this.id).val(this.o.toFixed(0));
+
+};

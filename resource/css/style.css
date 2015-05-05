@@ -12,6 +12,7 @@
 .panel{
     background-color: #262626;
     color: #eee;
+    font-size: 10px;
 }
 
 
@@ -156,4 +157,6 @@
 
 .panel-body input:focus{
     outline: 0;
+    box-shadow: 0 0 2pt 1pt white;
+
 }

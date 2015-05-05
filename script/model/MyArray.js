@@ -21,3 +21,18 @@ MyArray.prototype.popByIndex = function(index){
     return;
 
 };
+
+
+MyArray.prototype.getById = function(index){
+
+    var arrayAux = new MyArray();
+
+    for(var i=0; i < this.length; i++){
+
+        if(this[i].id == index)
+           return this[i];
+    }
+
+    return;
+
+};

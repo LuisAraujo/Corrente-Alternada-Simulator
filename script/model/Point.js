@@ -1,4 +1,4 @@
-var Point = function(img,x, y, h, w, Vm, cor, up){
+var AlcaVm = function(img,x, y, h, w, Vm, cor, up){
 
     this.x=x;
     this.y=y;
@@ -17,8 +17,7 @@ var Point = function(img,x, y, h, w, Vm, cor, up){
 };
 
 
-Point.prototype.click = function(event){
-
+AlcaVm.prototype.click = function(event){
 
     var rect = Canvas.getBoundingClientRect();
 
@@ -27,10 +26,12 @@ Point.prototype.click = function(event){
         y: event.clientY - rect.top
     };
 
+
+    //Conta necessário pelo fato do transladdo do canvas
     pos.y -= this.Vm*((HeightCanvas/this.Vm)/2);
 
     if( (pos.x > this.x) && (pos.x<(this.x+this.w)) && (pos.y>this.y) && (pos.y<(this.y+this.h)) ){
-
+        console.log(this.up);
         return true;
     }
 

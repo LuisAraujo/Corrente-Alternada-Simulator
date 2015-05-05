@@ -7,17 +7,17 @@ var Canvas = null;
 var distanceVesticalLine = 100;
 var distanceHorizontalLine = 100;
 var HeightCanvas = 800;
-var WidthCanvas = 1000;
+var WidthCanvas = 1030;
 
 var idDisponivel = 0;
 var proximaCor = 0;
 
 //Cores
-const COR_VERMELHO = "#f99";
-const COR_VERDE = "#9f9";
-const COR_AZUL = "#99f";
+const COR_VERMELHO = "#f55";
+const COR_VERDE = "#afa";
+const COR_AZUL = "#aaf";
 
-const COR_VERMELHO2 = "#f00";
+const COR_VERMELHO2 = "#d00";
 const COR_VERDE2 = "#0f0";
 const COR_AZUL2 = "#00f";
 
@@ -51,11 +51,11 @@ $(document).ready( function(){
 
 
     $("#bt-add-graphic").click(function(){
-        if(idDisponivel==4)
-            $(this).remove();
+        if(arrayGraphics.length>=4)
+            $(this).hide();
 
-        if(idDisponivel<=4)
-            createGraphics(300,4,0);
+        if(arrayGraphics.length<=4)
+            createGraphics(100,6.28,0);
 
     });
 
@@ -84,14 +84,14 @@ var init = function(){
    Canvas.onmousedown = function(event){
 
        for(var i = 0; i<arrayGraphics.length; i++){
-           if ((arrayGraphics[i].isVisible == false) || ((!arrayGraphics[i].isResize_v ) && ((!arrayGraphics[i].isResize_h )))  )
+           if ((arrayGraphics[i].isVisible == false) || ((!arrayGraphics[i].isChange_w ) && ((!arrayGraphics[i].isChange_vm )))  )
              continue;
 				
 
-                   for(var j = 0; j < arrayGraphics[i].arrayPontos.length; j++){
-                        if(arrayGraphics[i].arrayPontos [j].click(event)==true){
+                   for(var j = 0; j < arrayGraphics[i].arrayAlcaVm.length; j++){
+                        if(arrayGraphics[i].arrayAlcaVm [j].click(event)==true){
                             GraphicTarget = arrayGraphics[i];
-                            PointTarget =  arrayGraphics[i].arrayPontos [j];
+                            PointTarget =  arrayGraphics[i].arrayAlcaVm [j];
                           return;
                           //  i = arrayGraphics.length;
                           //  break;
@@ -106,10 +106,10 @@ var init = function(){
                    };
 
 		
-                   for(var j = 0; j < arrayGraphics[i].arrayQuadrado.length; j++){
-                       if(arrayGraphics[i].arrayQuadrado [j].click(event)==true){
+                   for(var j = 0; j < arrayGraphics[i].arrayAlcaW.length; j++){
+                       if(arrayGraphics[i].arrayAlcaW [j].click(event)==true){
                            GraphicTarget = arrayGraphics[i];
-                           PointTarget =  arrayGraphics[i].arrayQuadrado [j];
+                           PointTarget =  arrayGraphics[i].arrayAlcaW [j];
                           return;
                           // i = arrayGraphics.length;
                           // break;
@@ -139,20 +139,21 @@ var init = function(){
 
 
 
-            if(GraphicTarget.isResize_v){
+            if(GraphicTarget.isChange_w){
+
                 pos.y -= GraphicTarget.Vm*((HeightCanvas/GraphicTarget.Vm)/2);
 
-                if(PointTarget.up)
+                if(PointTarget.y < 0 && pos.y < 0 )
                     GraphicTarget.setVm(-pos.y);
-                else
+                else if (PointTarget.y > 0 && pos.y > 0 )
                    GraphicTarget.setVm(pos.y);
 
-            }else if(GraphicTarget.isResize_h){
+            }else if(GraphicTarget.isChange_vm){
 
                 //pos.x -= GraphicTarget.Vm*((HeightCanvas/GraphicTarget.Vm)/2);
-                var dif = pos.x -  posInicial.x;
+                var dif = pos.x - posInicial.x;
 
-                GraphicTarget.setW(dif/(GraphicTarget.w/2));
+                GraphicTarget.setW(-dif/1000);
 
 
 
@@ -161,13 +162,14 @@ var init = function(){
         }else{
                 var showPointResizeVertical;
                 var showPointResizeHorizontal;
+                var showPointResizeMove;
 
                 for(var i = 0; i<arrayGraphics.length; i++){
-                    if ((arrayGraphics[i].isVisible == false) || (!arrayGraphics[i].isResize_v ) )
+                    if ((arrayGraphics[i].isVisible == false) || (!arrayGraphics[i].isChange_w ) )
                         continue;
 
-                        for(var j = 0; j < arrayGraphics[i].arrayPontos.length; j++){
-                            if(arrayGraphics[i].arrayPontos [j].click(event)==true){
+                        for(var j = 0; j < arrayGraphics[i].arrayAlcaVm.length; j++){
+                            if(arrayGraphics[i].arrayAlcaVm [j].click(event)==true){
                                 showPointResizeVertical = true;
                                 i=arrayGraphics.length;
                                 break;
@@ -175,8 +177,41 @@ var init = function(){
                         }
                 }
 
+
+                 for(var l = 0; l<arrayGraphics.length; l++){
+                     if ((arrayGraphics[l].isVisible == false) || (!arrayGraphics[l].isChange_vm ) )
+                         continue;
+
+                     for(var m = 0; m < arrayGraphics[l].arrayAlcaW.length; m++){
+                         if(arrayGraphics[l].arrayAlcaW [m].click(event)==true){
+                             showPointResizeHorizontal= true;
+                             l=arrayGraphics.length;
+                             break;
+                         }
+                     }
+                 }
+
+
+
+                 for(var o = 0; o<arrayGraphics.length; o++){
+                  //   if ((arrayGraphics[o].isVisible == false) || (!arrayGraphics[o].isChange_o ) )
+                     if ((arrayGraphics[o].isVisible == false) )
+                         continue;
+
+                         if(arrayGraphics[o].AlcaO.click(event)==true){
+                             showPointResizeMove = true;
+                             o=arrayGraphics.length;
+                             break;
+                         }
+
+                 }
+
                 if(showPointResizeVertical)
                   Canvas.style.cursor = "n-resize";
+                else  if(showPointResizeHorizontal)
+                    Canvas.style.cursor = "e-resize";
+                else  if(showPointResizeMove)
+                    Canvas.style.cursor = "e-resize";
                 else
                     Canvas.style.cursor = "default";
 
@@ -195,7 +230,7 @@ var print = function(){
 
 var loadFiles = function(){
 
-    var qtdFiles = 6;
+    var qtdFiles = 9;
 
     var ponto1;
     var ponto2;
@@ -203,31 +238,50 @@ var loadFiles = function(){
     var ponto4;
     var ponto5;
     var ponto6;
+    var ponto7;
+    var ponto8;
+    var ponto9;
 
     ponto1 = new Image();
-    ponto1.src = "resource/img/ponto_azul.png";
+    ponto1.src = "resource/img/vm_azul.png";
     ponto1.onload = function(){  arrayImgLoad[0]=ponto1;  };
 
     ponto2 = new Image();
-    ponto2.src = "resource/img/ponto_verd.png";
+    ponto2.src = "resource/img/vm_verd.png";
     ponto2.onload = function(){  arrayImgLoad[1]=ponto2;  };
 
     ponto3 = new Image();
-    ponto3.src = "resource/img/ponto_verm.png";
+    ponto3.src = "resource/img/vm_verm.png";
     ponto3.onload = function(){  arrayImgLoad[2]=ponto3;  };
 
 
     ponto4 = new Image();
-    ponto4.src = "resource/img/quadrado_azul.png";
+    ponto4.src = "resource/img/w_azul.png";
     ponto4.onload = function(){  arrayImgLoad[3]=ponto4;  };
 
     ponto5 = new Image();
-    ponto5.src = "resource/img/quadrado_verd.png";
+    ponto5.src = "resource/img/w_verd.png";
     ponto5.onload = function(){  arrayImgLoad[4]=ponto5;  };
 
     ponto6 = new Image();
-    ponto6.src = "resource/img/quadrado_verm.png";
+    ponto6.src = "resource/img/w_verm.png";
     ponto6.onload = function(){  arrayImgLoad[5]=ponto6;  };
+
+
+    ponto7= new Image();
+    ponto7.src = "resource/img/o_azul.png";
+    ponto7.onload = function(){  arrayImgLoad[6]=ponto7;  };
+
+    ponto8 = new Image();
+    ponto8.src = "resource/img/o_verd.png";
+    ponto8.onload = function(){  arrayImgLoad[7]=ponto8;  };
+
+
+    ponto9 = new Image();
+    ponto9.src = "resource/img/o_verm.png";
+    ponto9.onload = function(){  arrayImgLoad[8]=ponto9;  };
+
+
 
     Functionloaging = setInterval(function(){
         if(arrayImgLoad.length >= qtdFiles){

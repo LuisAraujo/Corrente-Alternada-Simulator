@@ -10,7 +10,7 @@ Printer.prototype.print = function(){
     Context.clearRect(0,0,WidthCanvas, HeightCanvas);
 
     this.grid.print(Canvas);
-
+    /* padrão
     //Optimização para 3 graficos
     for(var i=this.graphics.length-1; i >= 0 ; i--){
 
@@ -21,8 +21,8 @@ Printer.prototype.print = function(){
 
         this.graphics[i].print();
     }
+     */
 
-    /* padrão
     for(var i=this.graphics.length-1; i >= 0 ; i--){
 
         if(this.graphics[i].deleteMe){
@@ -33,6 +33,6 @@ Printer.prototype.print = function(){
         this.graphics[i].print();
     }
 
-    */
+
 
 }
