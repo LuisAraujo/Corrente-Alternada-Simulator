@@ -97,7 +97,7 @@ var Graphic = function(id,Vm, w, o, cor, titulo){
             "<div class='col-md-4'>"+
             "<p> V = Vm * sen ( &omega; t  +  &theta; )</p>"+
             "</div>" +
-            "<div class='col-md-6'>"+
+            "<div class='col-md-7'>"+
                 "<p> <b>Vm </b>(AMPLITUDE MAXIMA) =  <input id='txVm"+id+"' type='text'  value='0' size='3' disabled/> </p>"+
                 "<p> <b>&omega; </b> (FREQUENCIA ANGULAR) = <input id='txW"+id+"' type='text'  value='0' size='3' disabled/> </p>"+
                 "<p> <b>&theta; </b> (ANGULO DE FASE) = <input id='txO"+id+"' type='text'  value='0' size='3' disabled/> </p>"+

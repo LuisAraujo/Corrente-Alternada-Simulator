@@ -8,6 +8,8 @@ var Printer = function(grid, graphics){
 Printer.prototype.print = function(){
 
     Context.clearRect(0,0,WidthCanvas, HeightCanvas);
+    Context.fillStyle = "#fff";
+    Context.fillRect(0,0,1030, 800);
 
     this.grid.print(Canvas);
     /* padrão

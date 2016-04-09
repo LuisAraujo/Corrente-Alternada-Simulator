@@ -2,6 +2,11 @@
  * Created by Luis 4raujo on 06/03/15.
  */
 
+var nameCurrentProject = "";
+
+var projectOpen = false;
+
+
 var Canvas = null;
 //var Context = null;
 var distanceVesticalLine = 100;
@@ -49,18 +54,29 @@ var arrayGraphics = new MyArray();
 
 $(document).ready( function(){
 
-
-    $("#bt-add-graphic").click(function(){
-        if(arrayGraphics.length>=4)
-            $(this).hide();
-
-        if(arrayGraphics.length<=4)
-            createGraphics(100,6.28,0);
-
+    $("#new_proj").click(function(){
+            createProject();
+            loadFiles();
     });
 
-    Canvas = document.getElementById("canvas");
-    loadFiles();
+    $("#save_proj").click(function(){
+        if(projectOpen)
+            previewSavingProject();
+    });
+
+    $("#open_proj").click(function(){
+        openProjectList();
+    });
+
+
+    $("#export_proj_asimage").click(function(){
+        exportProject_asImage();
+    });
+
+
+    $("#closeCAs").click(function(){
+        $(window).close();
+    });
 
 });
 
@@ -193,7 +209,7 @@ var init = function(){
 
 
 
-                 for(var o = 0; o<arrayGraphics.length; o++){
+                 for(var o = 0; o <arrayGraphics.length; o++){
                   //   if ((arrayGraphics[o].isVisible == false) || (!arrayGraphics[o].isChange_o ) )
                      if ((arrayGraphics[o].isVisible == false) )
                          continue;
@@ -328,4 +344,14 @@ var createGraphics = function(Vm, w, o){
 
 
 };
+
+
+
+
+//Fecha a aba (ainda não funciona!)
+function tabClose() {
+    window.close();
+}
+
+
 
